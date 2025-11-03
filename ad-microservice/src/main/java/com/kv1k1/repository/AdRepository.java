@@ -3,6 +3,7 @@ package com.kv1k1.repository;
 import com.kv1k1.entity.Ad;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +25,21 @@ public class AdRepository implements PanacheRepository<Ad> {
         return Optional.of(activeAds.get(randomIndex));
     }
 
+    @Transactional
     public void incrementDisplayCount(Long adId) {
-        update("displayCount = displayCount + 1 where id = ?1", adId);
+        Ad ad = findById(adId);
+        if (ad != null) {
+            ad.displayCount++;
+            persist(ad);
+        }
     }
 
+    @Transactional
     public void incrementClickCount(Long adId) {
-        update("clickCount = clickCount + 1 where id = ?1", adId);
+        Ad ad = findById(adId);
+        if (ad != null) {
+            ad.clickCount++;
+            persist(ad);
+        }
     }
 }

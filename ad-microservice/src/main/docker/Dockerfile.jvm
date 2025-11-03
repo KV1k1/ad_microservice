@@ -2,24 +2,24 @@ FROM registry.access.redhat.com/ubi9/openjdk-21:1.23
 
 ENV LANGUAGE='en_US:en'
 
-# Copy application
+# Copy application (from Maven build)
 COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/
 COPY --chown=185 target/quarkus-app/*.jar /deployments/
 COPY --chown=185 target/quarkus-app/app/ /deployments/app/
 COPY --chown=185 target/quarkus-app/quarkus/ /deployments/quarkus/
 
-# Copy JWT keys (SAME AS MAIN BACKEND)
-COPY --chown=185 src/main/resources/privateKey.pem /deployments/privateKey.pem
-COPY --chown=185 src/main/resources/publicKey.pem /deployments/publicKey.pem
+# Create config directory and copy JWT keys
+COPY --chown=185 privateKey.pem /deployments/privateKey.pem
+COPY --chown=185 publicKey.pem /deployments/publicKey.pem
+
+# Also copy to current directory for alternative lookup
+COPY --chown=185 privateKey.pem /deployments/config/privateKey.pem
+COPY --chown=185 publicKey.pem /deployments/config/publicKey.pem
 
 EXPOSE 8082
 USER 185
+
 ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8082 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
-
-# Install curl for health checks
-USER root
-RUN microdnf update -y && microdnf install -y curl && microdnf clean all
-USER 185
 
 ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]

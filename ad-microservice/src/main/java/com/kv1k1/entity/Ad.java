@@ -8,26 +8,27 @@ import java.time.LocalDateTime;
 @Table(name = "ads")
 public class Ad extends PanacheEntity {
 
-    @Column(nullable = false)
+    @Column(name = "image_url", nullable = false)
     public String imageUrl;
 
-    @Column(nullable = false)
+    @Column(name = "target_url", nullable = false)
     public String targetUrl;
 
-    @Column(nullable = false)
+    @Column(name = "is_active", nullable = false)
     public Boolean isActive;
 
-    @Column(nullable = false)
+    @Column(name = "created_at", nullable = false)
     public LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(name = "created_by", nullable = false)
     public String createdBy;
 
+    @Column(name = "expires_at")
     public LocalDateTime expiresAt;
 
-    @Column(nullable = false)
+    @Column(name = "display_count", nullable = false)
     public Integer displayCount;
 
-    @Column(nullable = false)
+    @Column(name = "click_count", nullable = false)
     public Integer clickCount;
 }
