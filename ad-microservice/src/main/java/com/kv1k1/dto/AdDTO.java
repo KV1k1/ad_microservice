@@ -12,5 +12,6 @@ public class AdDTO {
     public LocalDateTime expiresAt;
     public Integer displayCount;
     public Integer clickCount;
-}
 
+    public AdDTO() {}
+}

@@ -27,19 +27,11 @@ public class AdRepository implements PanacheRepository<Ad> {
 
     @Transactional
     public void incrementDisplayCount(Long adId) {
-        Ad ad = findById(adId);
-        if (ad != null) {
-            ad.displayCount++;
-            persist(ad);
-        }
+        update("displayCount = displayCount + 1 where id = ?1", adId);
     }
 
     @Transactional
     public void incrementClickCount(Long adId) {
-        Ad ad = findById(adId);
-        if (ad != null) {
-            ad.clickCount++;
-            persist(ad);
-        }
+        update("clickCount = clickCount + 1 where id = ?1", adId);
     }
 }
